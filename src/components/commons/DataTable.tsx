@@ -11,22 +11,24 @@ interface DataTableProps {
 
 export function DataTable({ columns, children }: DataTableProps) {
     return (
-        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+        <div className="overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-800/50">
+                <thead>
                     <tr>
                         {columns.map((column) => (
                             <th
                                 key={column.key}
                                 scope="col"
-                                className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${column.width ? column.width : 'w-full'}`}
+                                className={`px-4 py-2 text-left text-xs font-medium text-gray-400 
+                                    uppercase tracking-wider bg-gray-900/30 first:pl-6 last:pr-6
+                                    ${column.width ? column.width : ''}`}
                             >
                                 {column.header}
                             </th>
                         ))}
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-800/50">
                     {children}
                 </tbody>
             </table>

@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import Input from '../commons/Input';
 import { api } from '../../services/api';
+import { BiSolidInvader } from 'react-icons/bi';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { Footer } from '../commons/Footer';
 
 interface RegistrationFormProps {
     onRegistrationSuccess?: () => void;
@@ -84,75 +87,140 @@ export function RegistrationForm({ onRegistrationSuccess, onLoginClick }: Regist
     };
 
     return (
-        <form 
-            onSubmit={(e) => {
-                e.preventDefault();
-                handleRegister();
-            }} 
-            className="flex flex-col w-full"
-        >
-            <div className="flex flex-col justify-center items-center w-full px-4 py-8">
-                <div className="text-lg">Create your account</div>
-                <div className="text-gray-400">
-                    Already have an account? {' '}
-                    <button 
-                        type="button"
-                        onClick={onLoginClick}
-                        className="text-purple-500 underline hover:text-purple-700"
-                    >
-                        Login!
-                    </button>
-                </div>
-            </div>
-
-            <Input
-                label="Email"
-                type="email"
-                placeholder="you@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                error={errors.email}
-            />
-
-            <Input
-                label="Password"
-                type={showPasswords ? "text" : "password"}
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                error={errors.password}
-            />
-
-            <Input
-                label="Confirm Password"
-                type={showPasswords ? "text" : "password"}
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                error={errors.confirmPassword}
-            />
-
-            <div className="px-5 -mt-2 mb-2 flex justify-end">
-                <button
-                    type="button"
-                    onClick={() => setShowPasswords(!showPasswords)}
-                    className="text-purple-500 text-sm hover:text-purple-700"
-                >
-                    {showPasswords ? "Hide passwords" : "Show passwords"}
-                </button>
-            </div>
-
-            <div className="px-5 py-3 w-full flex flex-col justify-center items-center">
-                    <button type="submit"
-                        className="shadow-md text-white w-2/3 bg-gradient-to-tr from-purple-500 to-purple-900 p-2 mt-10 rounded-md"
-                    >SIGN UP</button>
-
-                    <div className="py-3">
-                        {errors && <div className="px-5 text-red-500">{errors.general && <div className="px-5 mt-3 text-red-500">{errors.general}</div>}</div>}
+        <>
+            <div className="bg-gray-900/90 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden 
+                transform transition-all duration-300 border border-gray-800/50">
+                <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-br from-purple-600/80 
+                    to-purple-900/80 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+                    <div className="relative z-10">
+                        <BiSolidInvader className="w-16 h-16 mx-auto text-purple-300 mb-4 
+                            transform hover:scale-110 transition-transform duration-200 
+                            hover:rotate-3" />
+                        <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">
+                            Create Account
+                        </h2>
+                        <p className="text-purple-200/90">Join the Predi Gamer community</p>
                     </div>
                 </div>
 
-            
-        </form>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    handleRegister();
+                }} 
+                className="p-8 space-y-6"
+                >
+                    <Input
+                        label="Email Address"
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        error={errors.email}
+                        icon={<span className="text-gray-400">@</span>}
+                        required
+                        autoFocus
+                    />
+
+                    <div className="space-y-4">
+                        <Input
+                            label="Password"
+                            type={showPasswords ? "text" : "password"}
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            error={errors.password}
+                            rightIcon={
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPasswords(!showPasswords)}
+                                    className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                                >
+                                    {showPasswords ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                </button>
+                            }
+                            required
+                        />
+
+                        <Input
+                            label="Confirm Password"
+                            type={showPasswords ? "text" : "password"}
+                            placeholder="••••••••"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            error={errors.confirmPassword}
+                            required
+                        />
+                    </div>
+
+                    <div className="bg-purple-500/5 rounded-lg p-4 border border-purple-500/10">
+                        <h3 className="text-sm font-medium text-purple-400 mb-2">Password Requirements</h3>
+                        <ul className="space-y-1">
+                            {[
+                                { check: password.length >= 8, text: 'At least 8 characters' },
+                                { check: /[a-z]/.test(password), text: 'One lowercase letter' },
+                                { check: /[A-Z]/.test(password), text: 'One uppercase letter' },
+                                { check: /[!@#$%^&*(),.?":{}|<>]/.test(password), text: 'One special character' }
+                            ].map((req, index) => (
+                                <li key={index} className="flex items-center gap-2 text-xs">
+                                    <span className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center
+                                        ${req.check 
+                                            ? 'bg-green-500/10 text-green-400' 
+                                            : 'bg-gray-800/50 text-gray-500'}`}>
+                                        {req.check ? '✓' : '·'}
+                                    </span>
+                                    <span className={req.check ? 'text-gray-300' : 'text-gray-500'}>
+                                        {req.text}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {errors.general && (
+                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg 
+                            animate-fadeIn">
+                            <p className="text-red-400 text-sm flex items-center gap-2">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" 
+                                    stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" 
+                                        strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                {errors.general}
+                            </p>
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-purple-600 
+                            text-white font-medium rounded-lg shadow-lg 
+                            hover:from-purple-600 hover:to-purple-700 
+                            focus:outline-none focus:ring-2 focus:ring-purple-500/40 
+                            focus:ring-offset-2 focus:ring-offset-gray-900
+                            transition-all duration-200 transform hover:scale-[1.02]
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            disabled:hover:scale-100"
+                    >
+                        Create Account
+                    </button>
+
+                    <div className="text-center">
+                        <p className="text-gray-400">
+                            Already have an account?{' '}
+                            <button
+                                type="button"
+                                onClick={onLoginClick}
+                                className="text-purple-400 hover:text-purple-300 font-medium 
+                                    focus:outline-none focus:underline transition-colors duration-200"
+                            >
+                                Log in
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <Footer />
+        </>
     );
 } 

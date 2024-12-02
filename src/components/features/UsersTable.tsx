@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { AxiosError } from 'axios';
 import { useUserStore } from '../../services/userService';
-import { DataTable } from '../common/DataTable';
-import { ErrorDisplay } from '../common/ErrorDisplay';
-import { LoadingDisplay } from '../common/LoadingDisplay';
+import { DataTable } from '../commons/DataTable';
+import { ErrorDisplay } from '../commons/ErrorDisplay';
+import { LoadingDisplay } from '../commons/LoadingDisplay';
 import { showToast } from '../../utils/toast';
+import { SectionHeader } from '../commons/SectionHeader';
 
 interface User {
     _id: string;
@@ -51,13 +52,13 @@ export function UsersTable() {
         }
     };
 
-    const handleRoleChange = async (userId: string, newRole: string, userEmail: string) => {
+    const handleRoleChange = async (userId: string, newRole: typeof ROLES[number], userEmail: string) => {
         if (userEmail === currentUserEmail) return;
         
         try {
-            await api.put(`/users/${userId}/role`, { role: newRole });
+            await api.put(`/update-role/${userId}`, { role: newRole });
             setUsers(users.map(user => 
-                user._id === userId ? { ...user, role: newRole } : user
+                user._id === userId ? { ...user, role: newRole as 'user' | 'expert' | 'admin' } : user
             ));
             showToast.success('User role updated successfully');
         } catch (err) {
@@ -72,6 +73,24 @@ export function UsersTable() {
         { key: 'role', header: 'Role', width: 'w-48' }
     ];
 
+    const CurrentUserCard = ({ user }: { user: User }) => (
+        <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 p-4">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                    <div className="w-2 h-2 rounded-full bg-purple-500/70"></div>
+                    <div>
+                        <div className="text-sm text-gray-300">{user.email}</div>
+                        <div className="text-xs text-gray-400 font-mono mt-1">{user._id}</div>
+                    </div>
+                </div>
+                <div className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 
+                    text-purple-400 rounded-full text-xs font-medium capitalize">
+                    {user.role}
+                </div>
+            </div>
+        </div>
+    );
+
     if (loading) {
         return <LoadingDisplay />;
     }
@@ -80,44 +99,58 @@ export function UsersTable() {
         return <ErrorDisplay error={error} onRetry={fetchUsers} />;
     }
 
+    const currentUser = users.find(user => user.email === currentUserEmail);
+    const otherUsers = users.filter(user => user.email !== currentUserEmail);
+
     return (
-        <div className="mx-2">
-            <h2 className="text-lg font-semibold mb-4">Users</h2>
-            <DataTable columns={columns}>
-                {users.map((user) => (
-                    <tr key={user._id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {user._id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {user.email}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <select
-                                value={user.role}
-                                onChange={(e) => handleRoleChange(user._id, e.target.value, user.email)}
-                                disabled={user.email === currentUserEmail}
-                                className={`w-full px-2 py-1 border rounded ${
-                                    user.email === currentUserEmail 
-                                        ? 'border-gray-200 bg-gray-50' 
-                                        : 'border-gray-300 bg-white'
-                                } shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-                            >
-                                {ROLES.map((role) => (
-                                    <option key={role} value={role}>
-                                        {role.charAt(0).toUpperCase() + role.slice(1)}
-                                    </option>
-                                ))}
-                            </select>
-                            {user.email === currentUserEmail && (
-                                <p className="mt-1 text-xs text-gray-500 italic">
-                                    Cannot modify own role
-                                </p>
-                            )}
-                        </td>
-                    </tr>
-                ))}
-            </DataTable>
+        <div className="space-y-6">
+            <SectionHeader
+                title="Users Management"
+                description="Manage user roles and permissions"
+            />
+
+            {currentUser && <CurrentUserCard user={currentUser} />}
+
+            <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 overflow-hidden">
+                <DataTable columns={columns}>
+                    {otherUsers.map((user) => (
+                        <tr key={user._id} 
+                            className="border-b border-gray-800/50 bg-gray-900/20 
+                                hover:bg-gray-800/40 transition-colors duration-150">
+                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-400 font-mono">
+                                {user._id}
+                            </td>
+                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-300">
+                                <div className="flex items-center">
+                                    <div className="w-2 h-2 rounded-full bg-purple-500/70 mr-2"></div>
+                                    {user.email}
+                                </div>
+                            </td>
+                            <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                <div className="relative group">
+                                    <select
+                                        value={user.role}
+                                        onChange={(e) => handleRoleChange(user._id, e.target.value, user.email)}
+                                        className="w-full px-3 py-1.5 rounded-md text-sm
+                                            bg-gray-800 text-gray-200 cursor-pointer hover:bg-gray-700
+                                            border border-gray-700
+                                            focus:outline-none focus:ring-2 focus:ring-purple-500/40 
+                                            focus:border-purple-500/40 
+                                            transition-colors duration-150"
+                                    >
+                                        {ROLES.map((role) => (
+                                            <option key={role} value={role} 
+                                                className="bg-gray-800 text-gray-200">
+                                                {role.charAt(0).toUpperCase() + role.slice(1)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </DataTable>
+            </div>
         </div>
     );
 } 

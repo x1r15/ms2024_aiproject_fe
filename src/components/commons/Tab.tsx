@@ -1,3 +1,5 @@
+import { commonStyles } from '../../styles/commonStyles';
+
 interface TabProps {
     label: string;
     isActive: boolean;
@@ -13,35 +15,33 @@ interface TabsProps {
     onTabChange: (tabId: string) => void;
 }
 
-const Tab = ({ label, isActive, onClick }: TabProps) => (
-    <button
-        onClick={onClick}
-        className={`px-4 py-3 transition-colors duration-200 relative
-            ${isActive 
-                ? 'text-purple-400' 
-                : 'text-gray-400 hover:text-gray-200'
-            }
-            first:ml-2 last:mr-2
-            focus:outline-none
-            text-sm tracking-wide
-        `}
-    >
-        <div className="flex items-center gap-2.5">
-            <span className="relative z-10">{label}</span>
+const Tab = ({ label, isActive, onClick }: TabProps) => {
+    const { tab } = commonStyles;
+    
+    return (
+        <button
+            onClick={onClick}
+            className={`${tab.button} ${isActive ? tab.active : tab.inactive}`}
+        >
+            <div className="flex items-center gap-2.5">
+                <span className="relative z-10">{label}</span>
+                {isActive && (
+                    <div className={tab.indicator.dot} />
+                )}
+            </div>
             {isActive && (
-                <div className="w-1 h-1 rounded-full bg-purple-500 opacity-70" />
+                <div className={tab.indicator.line} />
             )}
-        </div>
-        {isActive && (
-            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-        )}
-    </button>
-);
+        </button>
+    );
+};
 
 export const Tabs = ({ tabs, activeTab, onTabChange }: TabsProps) => {
+    const { tab } = commonStyles;
+    
     return (
-        <div className="border-b border-gray-800 bg-gray-900 bg-opacity-50 backdrop-blur-sm">
-            <div className="flex">
+        <div className={tab.container}>
+            <div className={tab.wrapper}>
                 {tabs.map((tab) => (
                     <Tab
                         key={tab.id}

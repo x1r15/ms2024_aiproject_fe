@@ -8,9 +8,8 @@ import { QueryExamplesSection } from './query/QueryExamplesSection';
 import { AnalysisInfoSection } from './query/AnalysisInfoSection';
 import { FeaturesChecklist } from './query/FeaturesChecklist';
 import { SectionHeader } from '../commons/SectionHeader';
-import { BasicModeIcon } from '../commons/icons/BasicModeIcon';
-import { AdvancedModeIcon } from '../commons/icons/AdvancedModeIcon';
 import { AdvancedQueryForm } from './query/AdvancedQueryForm';
+import { commonStyles } from '../../styles/commonStyles';
 
 interface Feature {
     Feature: string;
@@ -41,14 +40,13 @@ const AdvancedQuery = ({
     querying: boolean;
     answer: string;
 }) => (
-    <div className="space-y-6 mt-4">
+    <div className={commonStyles.queryContainer}>
         <SectionHeader
             title="Advanced Mode"
             description="Write custom Prolog queries to explore game genres and features"
-            icon={<AdvancedModeIcon />}
         />
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className={commonStyles.queryGrid}>
             <div className="col-span-2 space-y-4">
                 <AdvancedQueryForm
                     query={query}
@@ -216,11 +214,9 @@ export function QueryInterface() {
             <SectionHeader
                 title="Basic Mode"
                 description="Select game features to find matching genres and get recommendations"
-                icon={<BasicModeIcon />}
             />
 
             <div className="grid grid-cols-3 gap-6">
-                {/* Main Feature Selection Area - Takes 2 columns */}
                 <div className="col-span-2">
                     <FeaturesChecklist
                         features={features}
@@ -233,13 +229,11 @@ export function QueryInterface() {
                     />
                 </div>
 
-                {/* Information Panel - Takes 1 column */}
                 <div className="space-y-4">
                     <AnalysisInfoSection />
                 </div>
             </div>
 
-            {/* Results Section */}
             {parsedResults.length > 0 && (
                 <div id="results-section" className="bg-gray-900/50 p-6 rounded-lg shadow-lg border border-gray-800/50">
                     <h3 className="text-lg font-medium text-gray-200 mb-4 flex items-center gap-2">
@@ -277,8 +271,8 @@ export function QueryInterface() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-center py-12 bg-gray-800/50 rounded-lg border border-gray-700">
-                        <div className="text-gray-400">No matching genres found</div>
+                    <div className={commonStyles.noResults}>
+                        <div className={commonStyles.noResultsText}>No matching genres found</div>
                     </div>
                 )}
             </div>

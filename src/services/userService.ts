@@ -48,5 +48,4 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
 }))
 
-// Initialize user state from storage when the app loads
 useUserStore.getState().initializeFromStorage() 

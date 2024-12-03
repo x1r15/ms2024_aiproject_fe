@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Input from '../commons/Input';
 import { api } from '../../services/api';
-import { BiSolidInvader } from 'react-icons/bi';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { commonStyles } from '../../styles/commonStyles';
+import { Logo, ShowPasswordIcon, HidePasswordIcon } from '../commons/icons';
 import { Footer } from '../commons/Footer';
 
 interface RegistrationFormProps {
@@ -87,16 +87,12 @@ export function RegistrationForm({ onRegistrationSuccess, onLoginClick }: Regist
     };
 
     return (
-        <>
-            <div className="bg-gray-900/90 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden 
-                transform transition-all duration-300 border border-gray-800/50">
-                <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-br from-purple-600/80 
-                    to-purple-900/80 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+        <div className={commonStyles.formContainer}>
+            <div className={commonStyles.cardWrapper}>
+                <div className={commonStyles.headerGradient}>
+                    <div className={commonStyles.gridBackground}></div>
                     <div className="relative z-10">
-                        <BiSolidInvader className="w-16 h-16 mx-auto text-purple-300 mb-4 
-                            transform hover:scale-110 transition-transform duration-200 
-                            hover:rotate-3" />
+                        <Logo />
                         <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">
                             Create Account
                         </h2>
@@ -136,7 +132,7 @@ export function RegistrationForm({ onRegistrationSuccess, onLoginClick }: Regist
                                     onClick={() => setShowPasswords(!showPasswords)}
                                     className="text-gray-400 hover:text-gray-300 focus:outline-none"
                                 >
-                                    {showPasswords ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                    {showPasswords ? <HidePasswordIcon /> : <ShowPasswordIcon />}
                                 </button>
                             }
                             required
@@ -178,10 +174,9 @@ export function RegistrationForm({ onRegistrationSuccess, onLoginClick }: Regist
                     </div>
 
                     {errors.general && (
-                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg 
-                            animate-fadeIn">
-                            <p className="text-red-400 text-sm flex items-center gap-2">
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" 
+                        <div className={commonStyles.errorContainer}>
+                            <p className={commonStyles.errorText}>
+                                <svg className="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" 
                                     stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" 
                                         strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -193,14 +188,7 @@ export function RegistrationForm({ onRegistrationSuccess, onLoginClick }: Regist
 
                     <button
                         type="submit"
-                        className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-purple-600 
-                            text-white font-medium rounded-lg shadow-lg 
-                            hover:from-purple-600 hover:to-purple-700 
-                            focus:outline-none focus:ring-2 focus:ring-purple-500/40 
-                            focus:ring-offset-2 focus:ring-offset-gray-900
-                            transition-all duration-200 transform hover:scale-[1.02]
-                            disabled:opacity-50 disabled:cursor-not-allowed
-                            disabled:hover:scale-100"
+                        className={commonStyles.primaryButton}
                     >
                         Create Account
                     </button>
@@ -211,8 +199,7 @@ export function RegistrationForm({ onRegistrationSuccess, onLoginClick }: Regist
                             <button
                                 type="button"
                                 onClick={onLoginClick}
-                                className="text-purple-400 hover:text-purple-300 font-medium 
-                                    focus:outline-none focus:underline transition-colors duration-200"
+                                className={commonStyles.linkButton}
                             >
                                 Log in
                             </button>
@@ -221,6 +208,6 @@ export function RegistrationForm({ onRegistrationSuccess, onLoginClick }: Regist
                 </form>
             </div>
             <Footer />
-        </>
+        </div>
     );
 } 

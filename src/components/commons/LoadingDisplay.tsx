@@ -1,3 +1,5 @@
+import { commonStyles } from '../../styles/commonStyles';
+
 export function LoadingDisplay() {
-    return <div className="text-center p-8">Loading...</div>;
+    return <div className={commonStyles.loading.container}>Loading...</div>;
 } 

@@ -5,10 +5,12 @@ import { RegistrationForm } from './components/features/RegistrationForm';
 import { Dashboard } from './components/pages/Dashboard'
 import { api } from './services/api';
 import { Toaster } from 'react-hot-toast';
+import { commonStyles } from './styles/commonStyles';
 
 function App() {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
+    const { appLayout: styles } = commonStyles;
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
@@ -18,26 +20,22 @@ function App() {
     }, []);
 
     const AuthLayout = () => (
-        <div className="min-h-screen w-full flex items-center justify-center 
-            bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden">
-            {/* Enhanced Grid Overlay */}
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]"></div>
+        <div className={styles.auth.container}>
+            <div className={styles.auth.grid}></div>
             
-            {/* Premium Gradient Overlays - More pronounced but still elegant */}
-            <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/15 via-transparent to-transparent animate-gradient-shift"></div>
-                <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-purple-800/10 to-transparent animate-gradient-shift-slow"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-900/5 to-transparent animate-gradient-shift-slower"></div>
+            <div className={styles.auth.gradients.wrapper}>
+                <div className={styles.auth.gradients.top}></div>
+                <div className={styles.auth.gradients.middle}></div>
+                <div className={styles.auth.gradients.bottom}></div>
             </div>
             
-            {/* Enhanced Animated Particles */}
-            <div className="absolute inset-0 overflow-hidden">
+            <div className={styles.auth.particles.container}>
                 {[...Array(8)].map((_, i) => (
                     <div key={i} 
-                        className={`particle absolute rounded-full blur-sm
+                        className={`${styles.auth.particles.base}
                             ${i % 2 === 0 
-                                ? 'w-1 h-1 bg-gradient-to-r from-purple-400/30 to-purple-500/30' 
-                                : 'w-2 h-2 bg-gradient-to-r from-purple-500/20 to-purple-600/20'
+                                ? styles.auth.particles.small
+                                : styles.auth.particles.large
                             }`}
                         style={{
                             top: `${Math.random() * 100}%`,
@@ -49,27 +47,19 @@ function App() {
                 ))}
             </div>
 
-            {/* Enhanced Glow Effects */}
-            <div className="absolute inset-0">
-                <div className="absolute top-0 left-1/4 w-1/2 h-1/2 
-                    bg-purple-500/10 blur-[100px] animate-glow-pulse"></div>
-                <div className="absolute bottom-0 right-1/4 w-1/2 h-1/2 
-                    bg-purple-600/10 blur-[100px] animate-glow-pulse-slow"></div>
-                <div className="absolute top-1/4 right-0 w-1/3 h-1/3 
-                    bg-purple-700/5 blur-[80px] animate-glow-pulse-slower"></div>
+            <div className={styles.auth.glowEffects.wrapper}>
+                <div className={styles.auth.glowEffects.top}></div>
+                <div className={styles.auth.glowEffects.bottom}></div>
+                <div className={styles.auth.glowEffects.right}></div>
             </div>
 
-            {/* Subtle Vignette Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20"></div>
+            <div className={styles.auth.overlays.horizontal}></div>
+            <div className={styles.auth.overlays.vertical}></div>
 
-            {/* Content */}
-            <div className="w-full max-w-md transform transition-all duration-500 
-                relative z-10 scale-100 opacity-100">
-                <div className="relative">
-                    {/* Form Switch Animation */}
-                    <div className={`transform transition-all duration-500 ease-out-cubic
-                        ${isLoginForm ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0 pointer-events-none absolute'}`}>
+            <div className={styles.auth.content}>
+                <div className={styles.forms.wrapper}>
+                    <div className={`${styles.forms.transition} 
+                        ${isLoginForm ? styles.forms.login.active : styles.forms.login.inactive}`}>
                         {isLoginForm && (
                             <LoginForm 
                                 onLoginSuccess={() => {
@@ -83,8 +73,8 @@ function App() {
                             />
                         )}
                     </div>
-                    <div className={`transform transition-all duration-500 ease-out-cubic
-                        ${!isLoginForm ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0 pointer-events-none absolute'}`}>
+                    <div className={`${styles.forms.transition} 
+                        ${!isLoginForm ? styles.forms.register.active : styles.forms.register.inactive}`}>
                         {!isLoginForm && (
                             <RegistrationForm 
                                 onRegistrationSuccess={() => {

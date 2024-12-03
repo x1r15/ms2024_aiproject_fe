@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { commonStyles } from '../../styles/commonStyles';
 
 interface ChecklistCardProps {
     title: string;
@@ -17,20 +18,22 @@ export const ChecklistCard: FC<ChecklistCardProps> = ({
     children,
     className = ''
 }) => {
+    const { container, header } = commonStyles.checklistCard;
+    
     return (
-        <div className={`bg-gray-900/50 p-6 rounded-lg shadow-lg border border-gray-800/50 ${className}`}>
-            <div className="flex items-center justify-between mb-6">
-                <div className="space-y-1">
-                    <h3 className="text-base font-medium text-gray-200 flex items-center gap-2">
+        <div className={`${container} ${className}`}>
+            <div className={header.wrapper}>
+                <div className={header.titleWrapper}>
+                    <h3 className={header.title}>
                         {headerIcon}
                         <span>{title}</span>
                     </h3>
                     {subtitle && (
-                        <p className="text-sm text-gray-400">{subtitle}</p>
+                        <p className={header.subtitle}>{subtitle}</p>
                     )}
                 </div>
                 {headerRight && (
-                    <div className="text-sm text-gray-400">
+                    <div className={header.right}>
                         {headerRight}
                     </div>
                 )}

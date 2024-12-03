@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { commonStyles } from '../../styles/commonStyles';
 
 interface CodeExampleProps {
     code: string;
@@ -6,10 +7,12 @@ interface CodeExampleProps {
 }
 
 export const CodeExample: FC<CodeExampleProps> = ({ code, description }) => {
+    const { codeExample } = commonStyles;
+    
     return (
-        <div className="p-2 bg-gray-900/50 rounded border border-gray-700/30 hover:border-purple-500/20 transition-colors duration-200">
-            <code className="text-xs font-mono text-purple-400">{code}</code>
-            <p className="text-xs text-gray-400 mt-1 font-normal">{description}</p>
+        <div className={codeExample.container}>
+            <code className={codeExample.code}>{code}</code>
+            <p className={codeExample.description}>{description}</p>
         </div>
     );
 }; 

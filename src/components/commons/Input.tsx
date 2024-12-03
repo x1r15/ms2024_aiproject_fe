@@ -1,4 +1,6 @@
 import { InputHTMLAttributes } from 'react';
+import { commonStyles } from '../../styles/commonStyles';
+import { InputErrorIcon } from './icons';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string;
@@ -15,49 +17,38 @@ export default function Input({
     className = '', 
     ...props 
 }: InputProps) {
+    const { input } = commonStyles;
+    
     return (
-        <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-300">
+        <div className={input.wrapper}>
+            <label className={input.label}>
                 {label}
             </label>
-            <div className="relative rounded-lg shadow-sm">
+            <div className={input.container}>
                 {icon && (
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div className={input.iconWrapper.left}>
                         {icon}
                     </div>
                 )}
                 <input
                     {...props}
                     className={`
-                        block w-full rounded-lg
-                        ${icon ? 'pl-10' : 'pl-4'} 
-                        ${rightIcon ? 'pr-10' : 'pr-4'}
-                        py-2.5 
-                        bg-gray-800/50 
-                        border ${error ? 'border-red-500/50' : 'border-gray-700/50'}
-                        text-gray-200 
-                        placeholder-gray-500
-                        transition-all duration-200
-                        focus:ring-2 
-                        focus:ring-purple-500/20 
-                        focus:border-purple-500/50 
-                        focus:outline-none
-                        hover:bg-gray-800/70
+                        ${input.field.base}
+                        ${icon ? input.field.withLeftIcon : input.field.withoutLeftIcon} 
+                        ${rightIcon ? input.field.withRightIcon : input.field.withoutRightIcon}
+                        ${error ? input.field.error : ''}
                         ${className}
                     `}
                 />
                 {rightIcon && (
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <div className={input.iconWrapper.right}>
                         {rightIcon}
                     </div>
                 )}
             </div>
             {error && (
-                <p className="text-sm text-red-400 mt-1 flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                <p className={input.error.message}>
+                    <InputErrorIcon />
                     {error}
                 </p>
             )}

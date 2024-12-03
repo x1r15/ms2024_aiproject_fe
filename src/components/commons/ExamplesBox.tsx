@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { QueryExample, QueryExampleGroup } from '../../types/query';
+import { QueryExampleGroup } from '../../types/query';
 
 interface ExamplesBoxProps {
     groups: QueryExampleGroup[];

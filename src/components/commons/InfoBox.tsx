@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { commonStyles } from '../../styles/commonStyles';
 
 interface InfoBoxProps {
     title: string;
@@ -13,13 +14,12 @@ export const InfoBox: FC<InfoBoxProps> = ({
     children,
     variant = 'default'
 }) => {
-    const baseStyles = variant === 'tip' 
-        ? 'bg-purple-500/5 border-purple-500/20' 
-        : 'bg-gray-800/30 border-gray-700/30';
+    const { infoBox } = commonStyles;
+    const baseStyles = infoBox.base[variant];
 
     return (
-        <div className={`p-2.5 rounded-lg border ${baseStyles}`}>
-            <h3 className="text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+        <div className={`${infoBox.container} ${baseStyles}`}>
+            <h3 className={infoBox.title}>
                 {icon}
                 {title}
             </h3>

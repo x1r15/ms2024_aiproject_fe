@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { useUserStore } from './userService';
 
-// Create axios instance
 export const api = axios.create({
     baseURL: 'http://localhost:3000/api'
 });
 
-// Add interceptor to handle token refresh
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -28,16 +26,14 @@ api.interceptors.response.use(
                 localStorage.setItem('accessToken', accessToken);
                 api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
                 
-                // Update user state with new token
                 useUserStore.getState().setUser(accessToken);
                 
                 return api(originalRequest);
             } catch (refreshError) {
-                // Clear everything on refresh failure
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
                 useUserStore.getState().clearUser();
-                window.location.href = '/login'; // Redirect to login
+                window.location.href = '/login';
                 return Promise.reject(refreshError);
             }
         }
@@ -45,7 +41,6 @@ api.interceptors.response.use(
     }
 );
 
-// Add request interceptor to always include the latest access token
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('accessToken');

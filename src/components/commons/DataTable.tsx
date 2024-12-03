@@ -1,3 +1,5 @@
+import { commonStyles } from '../../styles/commonStyles';
+
 interface Column {
     key: string;
     header: string;
@@ -10,25 +12,25 @@ interface DataTableProps {
 }
 
 export function DataTable({ columns, children }: DataTableProps) {
+    const { dataTable } = commonStyles;
+
     return (
-        <div className="overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-800/50">
+        <div className={dataTable.wrapper}>
+            <table className={dataTable.table}>
                 <thead>
                     <tr>
                         {columns.map((column) => (
                             <th
                                 key={column.key}
                                 scope="col"
-                                className={`px-4 py-2 text-left text-xs font-medium text-gray-400 
-                                    uppercase tracking-wider bg-gray-900/30 first:pl-6 last:pr-6
-                                    ${column.width ? column.width : ''}`}
+                                className={`${dataTable.th} ${column.width ? column.width : ''}`}
                             >
                                 {column.header}
                             </th>
                         ))}
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800/50">
+                <tbody className={dataTable.tbody}>
                     {children}
                 </tbody>
             </table>
